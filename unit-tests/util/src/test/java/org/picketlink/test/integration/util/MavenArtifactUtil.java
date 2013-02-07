@@ -33,7 +33,7 @@ import org.jboss.shrinkwrap.resolver.api.maven.MavenDependencyResolver;
 
 /**
  * <p>
- * Utility class to retrieve artifacts from the local m2 repository used during the integration tests. 
+ * Utility class to retrieve artifacts from the local m2 repository used during the integration tests.
  * </p>
  * 
  * @author <a href="mailto:psilva@redhat.com">Pedro Silva</a>
@@ -51,11 +51,15 @@ public class MavenArtifactUtil {
      */
     public static WebArchive getQuickstartsMavenArchive(String artifactId) {
         WebArchive artifact = getMavenArchiveResolver()
-                .artifact("org.picketlink.quickstarts:" + artifactId + ":war:" + System.getProperty("binding") + ":" + System.getProperty("version.picketlink.quickstarts")).configureFrom("../../unit-tests/util/src/test/resources/settings.xml").resolveAs(WebArchive.class).iterator().next();
-        
+                .artifact(
+                        "org.picketlink.quickstarts:" + artifactId + ":war:" + System.getProperty("binding") + ":"
+                                + System.getProperty("version.picketlink.quickstarts"))
+                // .configureFrom("../../unit-tests/util/src/test/resources/settings.xml")
+                .resolveAs(WebArchive.class).iterator().next();
+
         return renameArtifact(artifactId, artifact);
     }
-    
+
     /**
      * <p>
      * Returns a {@link WebArchive} instance from the org.picketlink groupId.
@@ -66,16 +70,16 @@ public class MavenArtifactUtil {
      */
     public static WebArchive getIntegrationMavenArchive(String artifactId) {
         WebArchive artifact = getMavenArchiveResolver()
-                .artifact("org.picketlink:" + artifactId + ":war:" + System.getProperty("project.version"))
-                .goOffline().resolveAs(WebArchive.class).iterator().next();
-        
+                .artifact("org.picketlink:" + artifactId + ":war:" + System.getProperty("project.version")).goOffline()
+                .resolveAs(WebArchive.class).iterator().next();
+
         return renameArtifact(artifactId, artifact);
     }
 
     /**
      * <p>
-     * Rename a {@link WebArchive} to the value specified in the parameter <code>newName</code>.
-     * This method is useful when working with Apache Tomcat, for example, where the deployed file name is used as the application context path.
+     * Rename a {@link WebArchive} to the value specified in the parameter <code>newName</code>. This method is useful when
+     * working with Apache Tomcat, for example, where the deployed file name is used as the application context path.
      * </p>
      * 
      * @param newName
@@ -84,7 +88,7 @@ public class MavenArtifactUtil {
      */
     private static WebArchive renameArtifact(String newName, WebArchive artifact) {
         WebArchive renamedArtifact = ShrinkWrap.create(WebArchive.class, newName + ".war");
-        
+
         for (Map.Entry<ArchivePath, Node> content : artifact.getContent().entrySet()) {
             if (content.getValue().getAsset() != null) {
                 renamedArtifact.add(content.getValue().getAsset(), content.getKey());

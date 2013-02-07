@@ -3,15 +3,16 @@
 	used during the integration tests. -->
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
 	xmlns:as="urn:jboss:domain:1.2" xmlns:sd="urn:jboss:domain:security:1.1"
+	xmlns:as14="urn:jboss:domain:1.4" xmlns:sd12="urn:jboss:domain:security:1.2"
 	version="1.0">
 
 	<xsl:output method="xml" indent="yes" />
 
-	<xsl:template match="//as:profile/sd:subsystem/sd:security-domains/sd:security-domain[@name='idp']" />
-	<xsl:template match="//as:profile/sd:subsystem/sd:security-domains/sd:security-domain[@name='sp']" />
-	<xsl:template match="//as:profile/sd:subsystem/sd:security-domains/sd:security-domain[@name='picketlink-sts']" />
+	<xsl:template match="//as:profile/sd:subsystem/sd:security-domains/sd:security-domain[@name='idp']|//as14:profile/sd12:subsystem/sd12:security-domains/sd12:security-domain[@name='idp']" />
+	<xsl:template match="//as:profile/sd:subsystem/sd:security-domains/sd:security-domain[@name='sp']|//as14:profile/sd12:subsystem/sd12:security-domains/sd12:security-domain[@name='sp']" />
+	<xsl:template match="//as:profile/sd:subsystem/sd:security-domains/sd:security-domain[@name='picketlink-sts']|//as14:profile/sd12:subsystem/sd12:security-domains/sd12:security-domain[@name='picketlink-sts']" />
 
-	<xsl:template match="as:profile/sd:subsystem/sd:security-domains">
+	<xsl:template match="as:profile/sd:subsystem/sd:security-domains|as14:profile/sd12:subsystem/sd12:security-domains">
 		<security-domains>
 			<security-domain name="idp" cache-type="default">
 				<authentication>
