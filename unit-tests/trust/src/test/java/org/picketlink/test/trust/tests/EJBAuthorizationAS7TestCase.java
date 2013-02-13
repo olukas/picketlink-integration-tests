@@ -83,7 +83,8 @@ public class EJBAuthorizationAS7TestCase extends TrustTestsBase {
     @Test
     public void testSuccessfulEJBInvocation() throws Exception {
         // add the JDK SASL Provider that allows to use the PLAIN SASL Client
-        Security.addProvider(new Provider());
+        //Security.addProvider(new Provider());
+    	addProvider();
 
         Element assertion = getAssertionFromSTS("UserA", "PassA");
         
@@ -114,8 +115,9 @@ public class EJBAuthorizationAS7TestCase extends TrustTestsBase {
     @Test(expected = EJBAccessException.class)
     public void testNotAuthorizedEJBInvocation() throws Exception {
         // add the JDK SASL Provider that allows to use the PLAIN SASL Client
-        Security.addProvider(new Provider());
-
+        //Security.addProvider(new Provider());
+    	addProvider();
+    	
         // issue a new SAML Assertion using the PicketLink STS
         Element assertion = getAssertionFromSTS("UserA", "PassA");
 
@@ -141,6 +143,26 @@ public class EJBAuthorizationAS7TestCase extends TrustTestsBase {
 
         // If everything is ok the Principal name will be added to the message
         Assert.assertEquals("Hi UserA", object.echoUnchecked("Hi "));
+    }
+    
+    /*
+     * add the JDK SASL Provider or add 
+     */
+    private void addProvider() {
+    	try {
+            Provider provider = (Provider) Class.forName("com.sun.security.sasl.Provider")
+            		.getConstructor().newInstance();
+            Security.addProvider(provider);
+	    } catch (Exception e) {
+	    	try {
+	    		Provider provider = (Provider) Class.forName("com.ibm.security.sasl.IBMSASL")
+	            		.getConstructor().newInstance();
+	            Security.addProvider(provider);
+	    	} catch (Exception ex) { 
+	            System.err.println("Unable to register com.sun.security.sasl.Provider or com.ibm.security.sasl.IBMSASL security provider.");
+	            e.printStackTrace();
+	    	}
+	    }
     }
 
 }
