@@ -22,6 +22,7 @@
 package org.picketlink.test.trust.tests;
 
 import java.io.File;
+import java.security.Provider;
 import java.security.Security;
 import java.util.Hashtable;
 
@@ -46,8 +47,6 @@ import org.picketlink.test.trust.ejb.EchoService;
 import org.picketlink.test.trust.ejb.EchoServiceImpl;
 import org.w3c.dom.Element;
 
-import com.sun.security.sasl.Provider;
-
 /**
  * <p>
  * Tests the invocation of EJBs protected by the {@link SAML2STSLoginModule}.
@@ -58,7 +57,7 @@ import com.sun.security.sasl.Provider;
  * @author <a href="mailto:psilva@redhat.com">Pedro Silva</a>
  */
 @RunWith(PicketLinkIntegrationTests.class)
-@TargetContainers({ "disabled" })
+@TargetContainers ({"jbas7"})
 public class EJBAuthorizationAS7TestCase extends TrustTestsBase {
 
     @Deployment(name = "ejb-test", testable = false)

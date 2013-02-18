@@ -86,9 +86,9 @@
 		<binding.server>jboss-as7</binding.server>
 		<picketlink.binding>jbas7</picketlink.binding>		
 		<picketlink.skip.lib.copy>true</picketlink.skip.lib.copy>
-		<jbas7.dist.zip>jboss-eap-6.1.0.DR3.zip</jbas7.dist.zip>
+		<jbas7.dist.zip>jboss-eap-6.1.0.DR4.zip</jbas7.dist.zip>
 		<jboss.as.home>${integration.tests.containers.dir}/jboss-eap-6.1</jboss.as.home>
-		<jboss.as.picketlink.lib.dir>${jboss.as.home}/modules/org/picketlink/main</jboss.as.picketlink.lib.dir>
+		<jboss.as.picketlink.lib.dir>${jboss.as.home}/modules/system/layers/base/org/picketlink/main</jboss.as.picketlink.lib.dir>
 		<version.remoting3>3.2.14.GA</version.remoting3>
 	</properties>
 
@@ -204,8 +204,8 @@
 <!-- 											<stylesheet>src/test/resources/xslt/changeBindingPorts.xslt</stylesheet> -->
 <!-- 										</transformationSet> -->
 		 								<transformationSet>
-											<dir>${jboss.as.home}/modules/org/picketlink/main</dir>
-											<outputDir>${jboss.as.home}/modules/org/picketlink/main</outputDir>
+											<dir>${jboss.as.home}/modules/system/layers/base/org/picketlink/main</dir>
+											<outputDir>${jboss.as.home}/modules/system/layers/base/org/picketlink/main</outputDir>
 											<includes>
 												<include>module.xml</include>
 											</includes>
@@ -214,16 +214,16 @@
 										This should be removed when AS7 is updated the jbossxacml module 
 											is updated with 2.0.8
 										<transformationSet>
-											<dir>${jboss.as.home}/modules/org/jboss/security/xacml/main</dir>
-											<outputDir>${jboss.as.home}/modules/org/jboss/security/xacml/main</outputDir>
+											<dir>${jboss.as.home}/modules/system/layers/base/org/jboss/security/xacml/main</dir>
+											<outputDir>${jboss.as.home}/modules/system/layers/base/org/jboss/security/xacml/main</outputDir>
 											<includes>
 												<include>module.xml</include>
 											</includes>
 											<stylesheet>src/test/resources/xslt/changeJBossXACMLModule.xslt</stylesheet>
 										</transformationSet>
 										<transformationSet>
-											<dir>${jboss.as.home}/modules/org/apache/xalan/main</dir>
-											<outputDir>${jboss.as.home}/modules/org/apache/xalan/main</outputDir>
+											<dir>${jboss.as.home}/modules/system/layers/base/org/apache/xalan/main</dir>
+											<outputDir>${jboss.as.home}/modules/system/layers/base/org/apache/xalan/main</outputDir>
 											<includes>
 												<include>module.xml</include>
 											</includes>

@@ -65,7 +65,7 @@ import org.picketlink.trust.jbossws.jaas.JBWSTokenIssuingLoginModule;
  */
 
 @RunWith(PicketLinkIntegrationTests.class)
-@TargetContainers({ "jbas5", "eap5" })
+@TargetContainers({ "jbas5", "eap5", "jbas7" })
 public class JBWSTokenIssuingLoginModuleUnitTestCase extends TrustTestsBase {
 
     private static final Logger log = Logger.getLogger(JBWSTokenIssuingLoginModule.class);
