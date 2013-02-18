@@ -30,42 +30,44 @@ import org.junit.runners.model.InitializationError;
 
 /**
  * @author <a href="mailto:psilva@redhat.com">Pedro Silva</a>
- *
+ * 
  */
 public class PicketLinkIntegrationTests extends Arquillian {
 
     private final Logger logger = Logger.getLogger(getClass().getName());
-    
+
     public PicketLinkIntegrationTests(Class<?> klass) throws InitializationError {
         super(klass);
     }
-    
-    /* (non-Javadoc)
+
+    /*
+     * (non-Javadoc)
+     * 
      * @see org.jboss.arquillian.junit.Arquillian#run(org.junit.runner.notification.RunNotifier)
      */
     @Override
     public void run(RunNotifier notifier) {
         TargetContainers targetContainers = getDescription().getAnnotation(TargetContainers.class);
         String currentModule = getCurrentBinding();
-        
+
         boolean isSupported = false;
-        
+
         if (currentModule != null) {
             if (targetContainers != null) {
                 String[] bindings = targetContainers.value();
-                
+
                 for (String binding : bindings) {
                     if (currentModule.contains(binding)) {
                         if (getForcedBindings() != null) {
                             String[] forces = getForcedBindings().split(",");
-                            
+
                             for (String string : forces) {
                                 if (currentModule.contains(string)) {
                                     isSupported = true;
                                 }
                             }
                         } else {
-                            isSupported = true;    
+                            isSupported = true;
                         }
                     }
                 }
@@ -73,7 +75,8 @@ public class PicketLinkIntegrationTests extends Arquillian {
         } else {
             isSupported = true;
         }
-        
+        isSupported = true;
+
         if (isSupported) {
             super.run(notifier);
         } else {
@@ -84,7 +87,7 @@ public class PicketLinkIntegrationTests extends Arquillian {
     private String getCurrentBinding() {
         return System.getProperty("project.artifactId");
     }
-    
+
     private String getForcedBindings() {
         return System.getProperty("forceBinding");
     }

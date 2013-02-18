@@ -22,6 +22,7 @@
 package org.picketlink.test.trust.tests;
 
 import java.io.File;
+import java.security.Provider;
 import java.security.Security;
 import java.util.Hashtable;
 
@@ -35,6 +36,7 @@ import org.jboss.arquillian.container.test.api.Deployment;
 import org.jboss.arquillian.container.test.api.TargetsContainer;
 import org.jboss.shrinkwrap.api.ArchivePaths;
 import org.jboss.shrinkwrap.api.ShrinkWrap;
+import org.jboss.shrinkwrap.api.asset.EmptyAsset;
 import org.jboss.shrinkwrap.api.spec.JavaArchive;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -46,8 +48,6 @@ import org.picketlink.test.trust.ejb.EchoService;
 import org.picketlink.test.trust.ejb.EchoServiceImpl;
 import org.w3c.dom.Element;
 
-import com.sun.security.sasl.Provider;
-
 /**
  * <p>
  * Tests the invocation of EJBs protected by the {@link SAML2STSLoginModule}.
@@ -58,7 +58,7 @@ import com.sun.security.sasl.Provider;
  * @author <a href="mailto:psilva@redhat.com">Pedro Silva</a>
  */
 @RunWith(PicketLinkIntegrationTests.class)
-@TargetContainers({ "disabled" })
+@TargetContainers({ "jbas7" })
 public class EJBAuthorizationAS7TestCase extends TrustTestsBase {
 
     @Deployment(name = "ejb-test", testable = false)
@@ -76,38 +76,38 @@ public class EJBAuthorizationAS7TestCase extends TrustTestsBase {
         archive.addAsResource(
                 new File(EJBAuthorizationAS7TestCase.class.getClassLoader().getResource("props/sts-roles.properties").getPath()),
                 ArchivePaths.create("roles.properties"));
-
+        archive.addAsManifestResource(EmptyAsset.INSTANCE, "beans.xml");
         return archive;
     }
 
     @Test
     public void testSuccessfulEJBInvocation() throws Exception {
         // add the JDK SASL Provider that allows to use the PLAIN SASL Client
-        //Security.addProvider(new Provider());
-    	addProvider();
+        // Security.addProvider(new Provider());
+        addProvider();
 
         Element assertion = getAssertionFromSTS("UserA", "PassA");
-        
+
         // JNDI environment configuration properties
         Hashtable<String, Object> env = new Hashtable<String, Object>();
-        
+
         env.put(Context.URL_PKG_PREFIXES, "org.jboss.ejb.client.naming");
         env.put("java.naming.factory.initial", "org.jboss.naming.remote.client.InitialContextFactory");
         env.put("java.naming.provider.url", "remote://localhost:4447");
         env.put("jboss.naming.client.ejb.context", "true");
         env.put("jboss.naming.client.connect.options.org.xnio.Options.SASL_POLICY_NOPLAINTEXT", "false");
         env.put("javax.security.sasl.policy.noplaintext", "false");
-        
+
         // provide the user principal and credential. The credential is the previously issued SAML assertion
         env.put(Context.SECURITY_PRINCIPAL, "admin");
         env.put(Context.SECURITY_CREDENTIALS, DocumentUtil.getNodeAsString(assertion));
-        
+
         // create the JNDI Context and perform the authentication using the SAML2STSLoginModule
         Context context = new InitialContext(env);
-        
+
         // lookup the EJB
         EchoService object = (EchoService) context.lookup("ejb-test/EchoServiceImpl!org.picketlink.test.trust.ejb.EchoService");
-        
+
         // If everything is ok the Principal name will be added to the message
         Assert.assertEquals("Hi UserA", object.echo("Hi "));
     }
@@ -115,9 +115,9 @@ public class EJBAuthorizationAS7TestCase extends TrustTestsBase {
     @Test(expected = EJBAccessException.class)
     public void testNotAuthorizedEJBInvocation() throws Exception {
         // add the JDK SASL Provider that allows to use the PLAIN SASL Client
-        //Security.addProvider(new Provider());
-    	addProvider();
-    	
+        // Security.addProvider(new Provider());
+        addProvider();
+
         // issue a new SAML Assertion using the PicketLink STS
         Element assertion = getAssertionFromSTS("UserA", "PassA");
 
@@ -144,25 +144,24 @@ public class EJBAuthorizationAS7TestCase extends TrustTestsBase {
         // If everything is ok the Principal name will be added to the message
         Assert.assertEquals("Hi UserA", object.echoUnchecked("Hi "));
     }
-    
+
     /*
-     * add the JDK SASL Provider or add 
+     * add the JDK SASL Provider or add
      */
     private void addProvider() {
-    	try {
-            Provider provider = (Provider) Class.forName("com.sun.security.sasl.Provider")
-            		.getConstructor().newInstance();
+        try {
+            Provider provider = (Provider) Class.forName("com.sun.security.sasl.Provider").getConstructor().newInstance();
             Security.addProvider(provider);
-	    } catch (Exception e) {
-	    	try {
-	    		Provider provider = (Provider) Class.forName("com.ibm.security.sasl.IBMSASL")
-	            		.getConstructor().newInstance();
-	            Security.addProvider(provider);
-	    	} catch (Exception ex) { 
-	            System.err.println("Unable to register com.sun.security.sasl.Provider or com.ibm.security.sasl.IBMSASL security provider.");
-	            e.printStackTrace();
-	    	}
-	    }
+        } catch (Exception e) {
+            try {
+                Provider provider = (Provider) Class.forName("com.ibm.security.sasl.IBMSASL").getConstructor().newInstance();
+                Security.addProvider(provider);
+            } catch (Exception ex) {
+                System.err
+                        .println("Unable to register com.sun.security.sasl.Provider or com.ibm.security.sasl.IBMSASL security provider.");
+                e.printStackTrace();
+            }
+        }
     }
 
 }
