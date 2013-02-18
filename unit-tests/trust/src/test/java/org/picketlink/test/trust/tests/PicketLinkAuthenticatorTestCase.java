@@ -43,7 +43,7 @@ import org.picketlink.test.integration.util.TargetContainers;
  * @since Sep 13, 2011
  */
 @RunWith(PicketLinkIntegrationTests.class)
-@TargetContainers ({"jbas5", "eap5", "jbas7"})
+@TargetContainers ({"jbas5", "eap5"})
 public class PicketLinkAuthenticatorTestCase extends AbstractPicketLinkAuthenticatorTestCase {
     
     @Deployment(name = "authenticator", testable = false)

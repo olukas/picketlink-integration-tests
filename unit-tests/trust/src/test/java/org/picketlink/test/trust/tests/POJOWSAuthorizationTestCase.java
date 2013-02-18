@@ -41,7 +41,7 @@ import org.picketlink.test.integration.util.TargetContainers;
  * @since Oct 3, 2010
  */
 @RunWith(PicketLinkIntegrationTests.class)
-@TargetContainers({ "jbas5", "eap5", "jbas7" })
+@TargetContainers({ "jbas5", "eap5" })
 public class POJOWSAuthorizationTestCase extends AbstractPOJOWSAuthorizationTestCase {
 
     @Deployment(name = "picketlink-wstest-tests", testable = false)
