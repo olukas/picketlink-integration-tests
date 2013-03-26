@@ -19,6 +19,11 @@
 		<copy todir="${jboss.as.home}/modules/system/layers/base/org/apache/xalan/main" file="${maven.repo.local}/xalan/xalan/2.7.1/xalan-2.7.1.jar" />
 -->		
 		<copy todir="${jboss.as.home}/modules/system/layers/base/org/picketlink/main" file="${basedir}/../../unit-tests/trust/target/picketlink-wstest-tests.jar" />
+		<replace file="${jboss.as.home}/modules/system/layers/base/org/picketlink/main/module.xml">
+			  <replacetoken><![CDATA[</resources>]]></replacetoken>
+			  <replacevalue><![CDATA[	<resource-root path="picketlink-wstest-tests.jar" />
+	</resources>]]></replacevalue>
+		</replace>
 	</target>
 
 </project>
