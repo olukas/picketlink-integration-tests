@@ -17,9 +17,7 @@
  */
 package org.picketlink.test.integration.sts;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
@@ -89,7 +87,7 @@ import org.w3c.dom.Element;
  * @since Jun 8, 2010
  */
 @RunWith(PicketLinkIntegrationTests.class)
-@TargetContainers ({"jbas5", "jbas7", "eap5"})
+@TargetContainers({ "jbas5", "jbas7", "eap5" })
 public class PicketLinkSTSIntegrationUnitTestCase extends AbstractWSTrustIntegrationTests {
     private static WSTrustClient client;
 
@@ -98,8 +96,8 @@ public class PicketLinkSTSIntegrationUnitTestCase extends AbstractWSTrustIntegra
     @BeforeClass
     public static void initClient() throws Exception {
         // create the WSTrustClient instance.
-        client = new WSTrustClient("PicketLinkSTS", "PicketLinkSTSPort", TestUtil.getTargetURL("/picketlink-sts/PicketLinkSTS"),
-                new SecurityInfo("tomcat", "tomcat"));
+        client = new WSTrustClient("PicketLinkSTS", "PicketLinkSTSPort",
+                TestUtil.getTargetURL("/picketlink-sts/PicketLinkSTS"), new SecurityInfo("tomcat", "tomcat"));
 
         // get the certificate used in the public key scenarios.
         InputStream stream = Thread.currentThread().getContextClassLoader().getResourceAsStream("keystore/sts_keystore.jks");
@@ -220,7 +218,6 @@ public class PicketLinkSTSIntegrationUnitTestCase extends AbstractWSTrustIntegra
     public void testIssueSAML11OnBehalfOf() throws Exception {
         // issue a SAML 1.1 assertion for jduke.
         Element assertionElement = client.issueTokenOnBehalfOf(null, SAMLUtil.SAML11_TOKEN_TYPE, new Principal() {
-            @Override
             public String getName() {
                 return "jduke";
             }
@@ -248,7 +245,6 @@ public class PicketLinkSTSIntegrationUnitTestCase extends AbstractWSTrustIntegra
     public void testIssueSAML20OnBehalfOf() throws Exception {
         // issue a SAML 2.0 assertion for jduke.
         Element assertionElement = client.issueTokenOnBehalfOf(null, SAMLUtil.SAML2_TOKEN_TYPE, new Principal() {
-            @Override
             public String getName() {
                 return "jduke";
             }
@@ -288,7 +284,7 @@ public class PicketLinkSTSIntegrationUnitTestCase extends AbstractWSTrustIntegra
         // the usage of a key as proof-of-possession token results in the holder-of-key confirmation method being used.
         AssertionType assertion = this.validateSAML20Assertion(assertionElement, "tomcat", SAMLUtil.SAML2_HOLDER_OF_KEY_URI);
         // validate the holder of key contents.
-        SubjectConfirmationType subjConfirmation = (SubjectConfirmationType) assertion.getSubject().getConfirmation().get(0);
+        SubjectConfirmationType subjConfirmation = assertion.getSubject().getConfirmation().get(0);
         this.validateHolderOfKeyContents(subjConfirmation, WSTrustConstants.KEY_TYPE_SYMMETRIC, null, false);
 
         // TODO: client API must allow access to the WS-Trust response for retrieval of the proof token.
@@ -332,7 +328,7 @@ public class PicketLinkSTSIntegrationUnitTestCase extends AbstractWSTrustIntegra
         // the usage of a key as proof-of-possession token results in the holder-of-key confirmation method being used.
         AssertionType assertion = this.validateSAML20Assertion(assertionElement, "tomcat", SAMLUtil.SAML2_HOLDER_OF_KEY_URI);
         // validate the holder of key contents.
-        SubjectConfirmationType subjConfirmation = (SubjectConfirmationType) assertion.getSubject().getConfirmation().get(0);
+        SubjectConfirmationType subjConfirmation = assertion.getSubject().getConfirmation().get(0);
         this.validateHolderOfKeyContents(subjConfirmation, WSTrustConstants.KEY_TYPE_SYMMETRIC, null, false);
 
         // TODO: client API must allow access to the WS-Trust response for retrieval of the server entropy and algorithm.
@@ -365,7 +361,7 @@ public class PicketLinkSTSIntegrationUnitTestCase extends AbstractWSTrustIntegra
 
         AssertionType assertion = this.validateSAML20Assertion(assertionElement, "tomcat", SAMLUtil.SAML2_HOLDER_OF_KEY_URI);
         // validate the holder of key contents.
-        SubjectConfirmationType subjConfirmation = (SubjectConfirmationType) assertion.getSubject().getConfirmation().get(0);
+        SubjectConfirmationType subjConfirmation = assertion.getSubject().getConfirmation().get(0);
         this.validateHolderOfKeyContents(subjConfirmation, WSTrustConstants.KEY_TYPE_PUBLIC, certificate, false);
     }
 
@@ -397,7 +393,7 @@ public class PicketLinkSTSIntegrationUnitTestCase extends AbstractWSTrustIntegra
 
         AssertionType assertion = this.validateSAML20Assertion(assertionElement, "tomcat", SAMLUtil.SAML2_HOLDER_OF_KEY_URI);
         // validate the holder of key contents.
-        SubjectConfirmationType subjConfirmation = (SubjectConfirmationType) assertion.getSubject().getConfirmation().get(0);
+        SubjectConfirmationType subjConfirmation = assertion.getSubject().getConfirmation().get(0);
         this.validateHolderOfKeyContents(subjConfirmation, WSTrustConstants.KEY_TYPE_PUBLIC, certificate, true);
     }
 
@@ -681,7 +677,7 @@ public class PicketLinkSTSIntegrationUnitTestCase extends AbstractWSTrustIntegra
 
         Assert.assertEquals("Unexpected name id qualifier", "urn:picketlink:identity-federation", nameID.getNameQualifier());
         Assert.assertEquals("Unexpected name id value", assertionPrincipal, nameID.getValue());
-        SubjectConfirmationType subjType = (SubjectConfirmationType) subject.getConfirmation().get(0);
+        SubjectConfirmationType subjType = subject.getConfirmation().get(0);
         Assert.assertEquals("Unexpected confirmation method", confirmationMethod, subjType.getMethod());
 
         // validate the assertion conditions.

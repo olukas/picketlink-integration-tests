@@ -75,7 +75,6 @@ public class PicketLinkIntegrationTests extends Arquillian {
         } else {
             isSupported = true;
         }
-        isSupported = true;
 
         if (isSupported) {
             super.run(notifier);

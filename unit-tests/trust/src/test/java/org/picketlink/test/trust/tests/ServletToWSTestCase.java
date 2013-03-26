@@ -51,16 +51,16 @@ import org.picketlink.test.integration.util.TestUtil;
  * @since May 9, 2011
  */
 @RunWith(PicketLinkIntegrationTests.class)
-@TargetContainers ({"jbas5", "eap5"})
+@TargetContainers({ "jbas5", "eap5", "jbas7" })
 public class ServletToWSTestCase {
-    
+
     @Deployment(name = "binary-test", testable = false)
     @TargetsContainer("jboss")
     public static JavaArchive createWSTestDeployment() throws ConfigurationException, ProcessingException, ParsingException,
             InterruptedException {
         return ShrinkWrap.createFromZipFile(JavaArchive.class, new File("../../unit-tests/trust/target/binary-test.war"));
     }
-    
+
     @Test
     public void testServlet2WS() throws Exception {
         HttpClient client = new HttpClient();

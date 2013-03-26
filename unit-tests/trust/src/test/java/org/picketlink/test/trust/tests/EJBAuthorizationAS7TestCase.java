@@ -68,8 +68,8 @@ public class EJBAuthorizationAS7TestCase extends TrustTestsBase {
 
         archive.addClass(EchoService.class);
         archive.addClass(EchoServiceImpl.class);
-        archive.addAsManifestResource(new File(EJBAuthorizationAS7TestCase.class.getClassLoader()
-                .getResource("jboss-deployment-structure.xml").getPath()));
+        // archive.addAsManifestResource(new File(EJBAuthorizationAS7TestCase.class.getClassLoader()
+        // .getResource("jboss-deployment-structure.xml").getPath()));
         archive.addAsResource(
                 new File(EJBAuthorizationAS7TestCase.class.getClassLoader().getResource("props/sts-users.properties").getPath()),
                 ArchivePaths.create("users.properties"));
@@ -77,6 +77,9 @@ public class EJBAuthorizationAS7TestCase extends TrustTestsBase {
                 new File(EJBAuthorizationAS7TestCase.class.getClassLoader().getResource("props/sts-roles.properties").getPath()),
                 ArchivePaths.create("roles.properties"));
         archive.addAsManifestResource(EmptyAsset.INSTANCE, "beans.xml");
+        // archive.as(org.jboss.shrinkwrap.api.exporter.ZipExporter.class).exportTo(new java.io.File("/tmp/" +
+        // archive.getName()),
+        // true);
         return archive;
     }
 

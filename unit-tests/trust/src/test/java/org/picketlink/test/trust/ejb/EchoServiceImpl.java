@@ -26,7 +26,6 @@ import javax.annotation.security.RolesAllowed;
 import javax.ejb.Remote;
 import javax.ejb.SessionContext;
 import javax.ejb.Stateless;
-import javax.interceptor.Interceptors;
 
 import org.jboss.ejb3.annotation.SecurityDomain;
 
@@ -37,25 +36,29 @@ import org.jboss.ejb3.annotation.SecurityDomain;
  * @since Apr 11, 2011
  */
 @Stateless
-@Remote (EchoService.class)
-@SecurityDomain ("sts")
+@Remote(EchoService.class)
+@SecurityDomain("sts")
 public class EchoServiceImpl implements EchoService {
-    
+
     @Resource
     private SessionContext sessionContext;
-    
-    /* (non-Javadoc)
+
+    /*
+     * (non-Javadoc)
+     * 
      * @see org.picketlink.test.trust.ejb.EchoService#echo(java.lang.String)
      */
-    @RolesAllowed ("echoService")
+    @RolesAllowed("echoService")
     public String echo(String echo) {
         return echo + sessionContext.getCallerPrincipal().getName();
     }
 
-    /* (non-Javadoc)
+    /*
+     * (non-Javadoc)
+     * 
      * @see org.picketlink.test.trust.ejb.EchoService#echoUnchecked(java.lang.String)
      */
-    @RolesAllowed ("not_protected")
+    @RolesAllowed("not_protected")
     public String echoUnchecked(String echo) {
         return echo;
     }
