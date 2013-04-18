@@ -58,7 +58,7 @@ import org.w3c.dom.Element;
  * @author <a href="mailto:psilva@redhat.com">Pedro Silva</a>
  */
 @RunWith(PicketLinkIntegrationTests.class)
-@TargetContainers({ "jbas7" })
+@TargetContainers({ "disabled" })
 public class EJBAuthorizationAS7TestCase extends TrustTestsBase {
 
     @Deployment(name = "ejb-test", testable = false)

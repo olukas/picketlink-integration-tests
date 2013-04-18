@@ -50,8 +50,16 @@ import org.w3c.dom.Element;
 @RunWith(PicketLinkIntegrationTests.class)
 public abstract class TrustTestsBase {
     
-    @Deployment(name = "picketlink-sts", testable = false)
-    @TargetsContainer("jboss")
+    /**
+     * picketlink-sts.war deployment creation. 
+     * All methods overriding this class should annotate their deployment like this:
+     *   @Deployment(name = "picketlink-sts", testable = false)
+     *   @TargetsContainer("jboss")  
+     * 
+     * @return WebArchive of STS deployment.
+     * @throws GeneralSecurityException
+     * @throws IOException
+     */
     public static WebArchive createSTSDeployment() throws GeneralSecurityException, IOException {
         WebArchive sts = MavenArtifactUtil.getQuickstartsMavenArchive("picketlink-sts");
         

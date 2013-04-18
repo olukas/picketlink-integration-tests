@@ -13,10 +13,10 @@
 		<binding.server>jboss-as7</binding.server>
 		<picketlink.binding>jbas7</picketlink.binding>		
 		<picketlink.skip.lib.copy>true</picketlink.skip.lib.copy>
-		<jbas7.dist.zip>jboss-eap-6.1.0.ER3.zip</jbas7.dist.zip>
+		<jbas7.dist.zip>jboss-eap-6.1.0.ER5.zip</jbas7.dist.zip>
 		<jboss.as.home>${integration.tests.containers.dir}/jboss-eap-6.1</jboss.as.home>
 		<jboss.as.picketlink.lib.dir>${jboss.as.home}/modules/system/layers/base/org/picketlink/main</jboss.as.picketlink.lib.dir>
-		<version.remoting3>3.2.14.GA</version.remoting3>
+		<version.remoting3>3.2.15.GA</version.remoting3>
 	</properties>
 	
 	<dependencies>

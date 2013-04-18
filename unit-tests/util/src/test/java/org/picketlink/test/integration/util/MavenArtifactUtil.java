@@ -22,11 +22,13 @@
 
 package org.picketlink.test.integration.util;
 
+import java.util.Collection;
 import java.util.Map;
 
 import org.jboss.shrinkwrap.api.ArchivePath;
 import org.jboss.shrinkwrap.api.Node;
 import org.jboss.shrinkwrap.api.ShrinkWrap;
+import org.jboss.shrinkwrap.api.spec.JavaArchive;
 import org.jboss.shrinkwrap.api.spec.WebArchive;
 import org.jboss.shrinkwrap.resolver.api.DependencyResolvers;
 import org.jboss.shrinkwrap.resolver.api.maven.MavenDependencyResolver;
@@ -51,12 +53,8 @@ public class MavenArtifactUtil {
      */
     public static WebArchive getQuickstartsMavenArchive(String artifactId) {
         WebArchive artifact = getMavenArchiveResolver()
-                .artifact(
-                        "org.picketlink.quickstarts:" + artifactId + ":war:" + System.getProperty("binding") + ":"
-                                + System.getProperty("version.picketlink.quickstarts"))
-                // .configureFrom("../../unit-tests/util/src/test/resources/settings.xml")
-                .resolveAs(WebArchive.class).iterator().next();
-
+                .artifact("org.picketlink.quickstarts:" + artifactId + ":war:" + System.getProperty("binding") + ":" + System.getProperty("version.picketlink.quickstarts")).configureFrom("../../unit-tests/util/src/test/resources/settings.xml").resolveAs(WebArchive.class).iterator().next();
+        
         return renameArtifact(artifactId, artifact);
     }
 
@@ -70,9 +68,9 @@ public class MavenArtifactUtil {
      */
     public static WebArchive getIntegrationMavenArchive(String artifactId) {
         WebArchive artifact = getMavenArchiveResolver()
-                .artifact("org.picketlink:" + artifactId + ":war:" + System.getProperty("project.version")).goOffline()
-                .resolveAs(WebArchive.class).iterator().next();
-
+                .artifact("org.picketlink:" + artifactId + ":war:" + System.getProperty("project.version"))
+                .goOffline().resolveAs(WebArchive.class).iterator().next();
+        
         return renameArtifact(artifactId, artifact);
     }
 
@@ -101,4 +99,7 @@ public class MavenArtifactUtil {
         return DependencyResolvers.use(MavenDependencyResolver.class);
     }
 
+    public static Collection<JavaArchive> getArtifact(String gav) {
+        return getMavenArchiveResolver().artifact(gav).goOffline().resolveAs(JavaArchive.class);
+    }
 }

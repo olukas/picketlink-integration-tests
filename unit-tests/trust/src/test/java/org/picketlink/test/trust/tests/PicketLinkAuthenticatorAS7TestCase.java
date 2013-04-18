@@ -59,6 +59,9 @@ public class PicketLinkAuthenticatorAS7TestCase extends AbstractPicketLinkAuthen
         archive.addAsWebInfResource(new File("../../unit-tests/trust/target/test-classes/props/sts-users.properties"), ArchivePaths.create("classes/users.properties"));
         archive.addAsWebInfResource(new File("../../unit-tests/trust/target/test-classes/props/sts-roles.properties"), ArchivePaths.create("classes/roles.properties"));
         
+        archive.addClass(org.picketlink.test.trust.loginmodules.TestRequestUserLoginModule.class);
+
+        //archive.as(ZipExporter.class).exportTo(new File("authenticator.war"), true);
         return archive;
     }
     
