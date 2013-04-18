@@ -58,6 +58,63 @@
 			         </login-module>
                 </authentication>
             </security-domain>
+      <security-domain name="localValidationDomain">
+        <xsl:element name="jsse">
+          <xsl:attribute name="keystore-url">file:///${jboss.server.config.dir}/stspub.jks</xsl:attribute>
+          <xsl:attribute name="keystore-password">keypass</xsl:attribute>
+          <xsl:attribute name="keystore-type">JKS</xsl:attribute>
+          <xsl:attribute name="server-alias">sts</xsl:attribute>
+        </xsl:element>
+      </security-domain>
+      <security-domain name="gateway" cache-type="default">
+        <authentication>
+          <!-- dummy login module for test purposes -->
+          <login-module code="org.picketlink.test.trust.loginmodules.TokenSupplierTestLoginModule" flag="required">
+            <module-option name="map.token.key" value="ClientID" />
+            <module-option name="ClientID" value="test-token-value:g2s-http" />
+            <module-option name="password-stacking" value="useFirstPass" />
+          </login-module>
+          <!-- this LM will pick ClientID value supplied by previous LM and construct specific ws-trust request to ge tsecurity token -->
+          <login-module code="org.picketlink.trust.jbossws.jaas.JBWSTokenIssuingLoginModule" flag="required">
+            <module-option name="endpointAddress" value="http://localhost:8080/picketlink-sts/PicketLinkSTS" />
+            <module-option name="serviceName" value="PicketLinkSTS" />
+            <module-option name="portName" value="PicketLinkSTSPort" />
+            <module-option name="inject.callerprincipal" value="true" />
+            <module-option name="map.token.key" value="ClientID" />
+            <!-- use default value module-option name="requestType">http://docs.oasis-open.org/ws-sx/ws-trust/200512/Validate</module-option -->
+            <module-option name="soapBinding" value="http://www.w3.org/2003/05/soap/bindings/HTTP/" />
+            <module-option name="isBatch" value="false" />
+            <module-option name="wspAppliesTo" value="http://services.testcorp.org/provider1" />
+            <module-option name="wsaIssuer" value="http://services.testcorp.org/provider1" />
+            <module-option name="roleKey" value="Membership" />
+            <module-option name="username" value="UserA" />
+            <module-option name="password" value="PassA" />
+          </login-module>
+          <login-module code="org.picketlink.trust.jbossws.jaas.SAMLRoleLoginModule" flag="required" />
+        </authentication>
+      </security-domain>
+      <security-domain name="service" cache-type="default">
+        <authentication>
+          <login-module code="org.picketlink.identity.federation.bindings.jboss.auth.SAML2STSLoginModule" flag="required">
+            <module-option name="password-stacking" value="useFirstPass" />
+            <module-option name="cache.invalidation" value="true" />
+            <module-option name="localValidation" value="true" />
+            <module-option name="localValidationSecurityDomain" value="localValidationDomain" />
+            <module-option name="tokenEncodingType" value="gzip" />
+            <module-option name="samlTokenHttpHeader" value="Auth" />
+            <module-option name="samlTokenHttpHeaderRegEx" value=".*&quot;(.*)&quot;.*" />
+            <module-option name="samlTokenHttpHeaderRegExGroup" value="1" />
+          </login-module>
+          <login-module code="org.picketlink.trust.jbossws.jaas.SAMLRoleLoginModule" flag="required" />
+        </authentication>
+        <xsl:element name="jsse">
+          <xsl:attribute name="keystore-url">file:///${jboss.server.config.dir}/stspub.jks</xsl:attribute>
+          <xsl:attribute name="keystore-password">keypass</xsl:attribute>
+          <xsl:attribute name="keystore-type">JKS</xsl:attribute>
+          <xsl:attribute name="server-alias">sts</xsl:attribute>
+        </xsl:element>
+      </security-domain>
+
 			<xsl:apply-templates select="@* | *" />
 		</security-domains>
 	</xsl:template>
