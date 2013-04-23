@@ -16,6 +16,7 @@
 		<jbas7.dist.zip>jboss-eap-6.1.0.ER5.zip</jbas7.dist.zip>
 		<jboss.as.home>${integration.tests.containers.dir}/jboss-eap-6.1</jboss.as.home>
 		<jboss.as.picketlink.lib.dir>${jboss.as.home}/modules/system/layers/base/org/picketlink/main</jboss.as.picketlink.lib.dir>
+		<version.jboss-client>${version.jboss_as7}</version.jboss-client>
 		<version.remoting3>3.2.15.GA</version.remoting3>
 	</properties>
 	
@@ -106,6 +107,18 @@
 			<version>${version.remoting3}</version>
 			<scope>test</scope>
 		</dependency>
+		 <dependency>
+            		<groupId>org.jboss.as</groupId>
+            		<artifactId>jboss-as-ejb-client-bom</artifactId>
+			<version>7.2.0.Final</version>
+            		<type>pom</type>
+        	</dependency>
+        	<dependency>
+            		<groupId>org.jboss.as</groupId>
+            		<artifactId>jboss-as-jms-client-bom</artifactId>
+			<version>7.2.0.Final</version>
+            		<type>pom</type>
+        	</dependency>
 	</dependencies>
 
 	<build>
