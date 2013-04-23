@@ -37,7 +37,7 @@ import org.jboss.ejb3.annotation.SecurityDomain;
  */
 @Stateless
 @Remote(EchoService.class)
-@SecurityDomain("sts")
+@SecurityDomain ("ejb-remoting-sts")
 public class EchoServiceImpl implements EchoService {
 
     @Resource
