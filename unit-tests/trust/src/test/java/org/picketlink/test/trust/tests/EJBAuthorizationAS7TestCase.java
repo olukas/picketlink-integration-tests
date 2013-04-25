@@ -50,7 +50,8 @@ import org.picketlink.test.integration.util.TargetContainers;
 import org.picketlink.test.trust.ejb.EchoService;
 import org.picketlink.test.trust.ejb.EchoServiceImpl;
 import org.w3c.dom.Element;
-import com.sun.security.sasl.Provider;
+//import com.sun.security.sasl.Provider;
+import java.security.Provider;
 
 /**
  * <p>
@@ -95,7 +96,8 @@ public class EJBAuthorizationAS7TestCase extends TrustTestsBase {
     @Test
     public void testSuccessfulEJBInvocation() throws Exception {
         // add the JDK SASL Provider that allows to use the PLAIN SASL Client
-        Security.addProvider(new Provider());
+    	addProvider();
+        //Security.addProvider(new Provider());
 
         Element assertion = getAssertionFromSTS("UserA", "PassA");
 
@@ -129,7 +131,8 @@ public class EJBAuthorizationAS7TestCase extends TrustTestsBase {
     @Test(expected = EJBAccessException.class)
     public void testNotAuthorizedEJBInvocation() throws Exception {
         // add the JDK SASL Provider that allows to use the PLAIN SASL Client
-        Security.addProvider(new Provider());
+        addProvider();
+    	//Security.addProvider(new Provider());
 
         // issue a new SAML Assertion using the PicketLink STS
         Element assertion = getAssertionFromSTS("UserA", "PassA");
@@ -188,6 +191,22 @@ public class EJBAuthorizationAS7TestCase extends TrustTestsBase {
 
         return "ejb:" + appName + "/" + moduleName + "/" + distinctName + "/" + beanName + "!" + viewClassName
                 + (isStateful ? "?stateful" : "");
+    }
+    
+    private void addProvider() {
+            try {
+                Provider provider = (Provider) Class.forName("com.sun.security.sasl.Provider").getConstructor().newInstance();
+                Security.addProvider(provider);
+            } catch (Exception e) {
+                try {
+                    Provider provider = (Provider) Class.forName("com.ibm.security.sasl.IBMSASL").getConstructor().newInstance();
+                    Security.addProvider(provider);
+                } catch (Exception ex) {
+                    System.err
+                            .println("Unable to register com.sun.security.sasl.Provider or com.ibm.security.sasl.IBMSASL security provider.");
+                    e.printStackTrace();
+                }
+            }
     }
 
 }
